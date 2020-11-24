@@ -14,18 +14,24 @@
         <a href="index.php" class="logo">Ticket</a>
     </div>
 
+    <?php
+    function showTables(){
+//        data-table.class = visible
+    }
+    ?>
     <div class="button-box-left">
-        <button onclick = "openSide()"
-                id="filter" name="filter">Tables</button>
+        <button onclick = "showTables()" id="filter" name="filter">Show Tables</button>
     </div>
 
+
+
     <div class="button-box">
-        <button onmouseover = "slide_init(this)" id = "id_of_element">Test</button>
-        <button onclick = "hideDataTable()" id="header-button">Clear All Filters</button>
-        <button onclick = "showShare()"
-                id="header-button">Share Query</button>
-        <a href = "login.html" button id="header-button" style="color: white; background-color: rgb(26, 162, 96)">Go Back</a>
+<!--        <button onmouseover = "slide_init(this)" id = "id_of_element">Test</button>-->
+<!--        <button onclick = "hideDataTable()" id="header-button">Clear All Filters</button>-->
+<!--        <button onclick = "showShare()" id="header-button">Share Query</button>-->
+<!--        <a href = "login.html" button id="header-button" style="color: white; background-color: rgb(26, 162, 96)">Go Back</a>-->
     </div>
+
 </div>
 
 <div name ="sideBar" id = "sideBar">
