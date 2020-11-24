@@ -1,0 +1,136 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+#header {
+    width: 100%;
+    height: 60px;
+    top: 0;
+    position: fixed;
+    background-color: #041E42;
+    margin-bottom: 10px;
+}
+
+#header-button {
+    border: none;
+    background-color: whitesmoke;
+    color: black;
+    padding: 10px;
+}
+
+#filter {
+    border: none;
+    background-color: whitesmoke;
+    color: black;
+    padding: 10px;
+}
+
+#hidden{
+    margin-top: 80px;
+}
+
+.button-box {
+    right: 0;
+    position:fixed;
+    padding-top: 10px;
+    padding-right: 10px;
+}
+
+.button-box-left {
+    padding-top: 15px;
+    padding-right: 10px;
+    float: left;
+    display: inline-block;
+}
+
+#sideBar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    /* top: 100; */
+    margin-top: 55px;
+    left: 0;
+    background-color: rgb(20,170,100);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 5px;
+    color: white;
+}
+
+.closeButton{
+    position: absolute;
+    top: 0;
+    right: 25px;
+    margin-left: 50px;
+    margin-top: 20px;
+    color: black;
+}
+
+.logo {
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10%;
+    margin-left: 10px;
+    color:white;
+    font-size: 30px;
+}
+
+.invisible {
+    display: none;
+}
+
+#centered {
+    font-size: 50px;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+#share {
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: rgb(20,170,100);
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+
+#checkboxes label{
+    border: 1px solid;
+    display: block;
+    color:black;
+    background-color: white;
+
+}
+
+#table-select{
+    width: 108px;
+    position:absolute;
+}
+
+#checkboxes label:hover{
+    background-color: lightblue;
+}
+
+#tables{
+    position:relative;
+}
+
+#select-title{
+    display: none;
+}
+
+.hidden {
+    display: none;
+}a
