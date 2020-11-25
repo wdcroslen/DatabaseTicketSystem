@@ -1,3 +1,8 @@
+<?php
+session_start();
+//$_SESSION['user'] = $_POST['usernameTextbox'];
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,14 +12,19 @@
     <link href="main-style.css" rel="stylesheet" type="text/css" />
 <!--    <link href="table-style.css" rel="stylesheet" />-->
 </head>
+
+
+
+
+
+
 <body>
 
 <!--Comment here-->
 
 
-
-
 <!--TODO: STUFF-->
+
 
 
 <div name="header" id="header">
@@ -23,16 +33,10 @@
     </div>
 
     <div class="button-box-left">
-        <button onclick = "openSide()"
-                id="filter" name="filter">Tables</button>
+        <button onclick = "openSide()"  id="filter" name="filter">Tables</button>
     </div>
 
     <div class="button-box">
-        <button onmouseover = "slide_init(this)" id = "id_of_element">Test</button>
-        <button onclick = "hideDataTable()" id="header-button">Clear All Filters</button>
-        <button onclick = "showShare()"
-                id="header-button">Share Query</button>
-        <a href = "login.html" button id="header-button" style="color: white; background-color: rgb(26, 162, 96)">Go Back</a>
     </div>
 </div>
 
@@ -82,13 +86,22 @@
     <button onclick="showDataTable()">Fake Submit</button>
 </div>
 
+
 <div id = "centered">
     <img src="UTEP_LOGO.png" alt="logo here">
 </div>
 
+<div id = "centered-sesh">
+    Welcome <?php
 
+    if(isset($_SESSION['user'])) {
+        echo "Your session is running " . $_SESSION['user'];
+    }
 
+//    $sid = $_GET;
+    ?><br>
 
+</div>
 
 
 <div id = "data-table" class = "invisible">
@@ -131,6 +144,7 @@
     </table>
 </div>
 
+
 <div id = "share" class="invisible">
     <h4>Share Query</h4>
     <input type="text" placeholder="Share with a fellow Googler.">
@@ -138,6 +152,9 @@
     <button id="header-button" onclick="hideShare()">Share</button>
 </div>
 
-<script src="script.js"></script>
+<!--<script src="script.js"></script>-->
+
+
 </body>
 </html>
+
