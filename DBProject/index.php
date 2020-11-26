@@ -3,6 +3,7 @@
 if (isset($_SESSION['userName'])) {
     session_destroy();
 }
+
 session_start();
 $servername = "ilinkserver.cs.utep.edu";
 $username = "wdcroslen";
@@ -12,6 +13,7 @@ $currentUser = "";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
+//$_SESSION['conn'] = $conn;
 
 // Check connection
 if ($conn->connect_error) {
@@ -43,19 +45,16 @@ function getUsersList($conn){
     while($row = mysqli_fetch_array($result)) {
         array_push($arr,$row[2]);
         //First | Last | UtepEmail | Role
-//        echo ($row[0] . " " . $row[1] . " " . $row[2] . " " . $row[3]); // Print the entire row data
-//        print("\n");
     }
     return $arr;
 }
 
 if($_SERVER['REQUEST_METHOD']=='POST') {
-    echo "YEEET";
+//    echo "YEEET";
     display();
 }
 
 function display(){
-//          TODO: CHECK IF USER IN USER LIST
     $_SESSION['user'] = $_POST["usernameTextbox"];
     if(userExists($_POST["usernameTextbox"])){
         header('location:userRequest.php');

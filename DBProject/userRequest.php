@@ -1,6 +1,12 @@
 <?php
+//TODO: Make this into a seperate file to only have to call once
+$servername = "ilinkserver.cs.utep.edu";
+$username = "wdcroslen";
+$password = "*utep2020!";
+$database = "f20am_team13";
+$currentUser = "";
+$conn = new mysqli($servername, $username, $password, $database);
 session_start();
-//$_SESSION['user'] = $_POST['usernameTextbox'];
 
 ?>
 <!DOCTYPE html>
@@ -13,19 +19,7 @@ session_start();
 <!--    <link href="table-style.css" rel="stylesheet" />-->
 </head>
 
-
-
-
-
-
 <body>
-
-<!--Comment here-->
-
-
-<!--TODO: STUFF-->
-
-
 
 <div name="header" id="header">
     <div class="button-box-left">
@@ -33,32 +27,56 @@ session_start();
     </div>
 
     <div class="button-box-left">
-        <button onclick = "openSide()"  id="filter" name="filter">Tables</button>
+        <script>
+            function showTickets(){
+                var elem = document.getElementById("data-table");
+                var butt = document.getElementById("ticketB");
+                if (elem.className == "invisible"){
+                    elem.classList.remove("invisible");
+                    butt.textContent = "Hide Tickets"
+                }
+                else {
+                    elem.classList.add("invisible");
+                    butt.textContent = "View Tickets"
+                }
+            }
+            function showPanel(){
+                // var elem = document.getElementById("ticketPanelButton");
+                document.getElementById("sideBar").style.width = "250px";
+            }
+            function hidePanel(){
+                // var elem = document.getElementById("ticketPanelButton");
+                document.getElementById("sideBar").style.width = "0";
+            }
+        </script>
+        <button onclick = "showTickets()"  id="ticketB" name="filter">View Tickets</button>
+        <button onclick = "showPanel()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
     </div>
 
     <div class="button-box">
     </div>
 </div>
 
-<div name ="sideBar" id = "sideBar">
-    <p>FILTERS</p>
+<div id ="sideBar">
+    <h3>Generate A Ticket</h3>
     <form>
-        <p class ="closeButton" onclick = "closeSide()"
+        <p class ="closeButton" onclick = "hidePanel()"
         >Close</p>
-        <input type="text" placeholder="User/device ID">
+        <input type="text" placeholder="fullMinerEmail">
         <div style="padding: 10px"></div>
-        <input type="search" placeholder="Search...">
+        <select name="cols" id="cols" class="select">
+            <option id="select-title">Select Category</option>
+        </select>
+
         <div style="padding: 10px"></div>
-        <input type="number" placeholder="Limit number of rows">
+<!--        <input type="number" placeholder="Limit number of rows">-->
         <div style="padding: 10px"></div>
 
     </form>
 
     <div id="table-select">
         <div id="table-box" onCLick="showCheckboxes()">
-            <select name="cols" id="cols" class="select">
-                <option id="select-title">Select columns</option>
-            </select>
+
         </div>
 
         <div id="checkboxes" class="hidden">
@@ -96,53 +114,71 @@ session_start();
 
     if(isset($_SESSION['user'])) {
         echo "Your session is running " . $_SESSION['user'];
+        showTickets();
     }
 
-//    $sid = $_GET;
+    function showTickets(){
+        global $conn;
+        $query = "SELECT * FROM Ticket Where UtepEmail = '" . $_SESSION['user']."'";
+        $result = mysqli_query($conn,$query);
+        echo '<br></br>';
+        echo "<div id = 'data-table' class = 'invisible'><table> ";
+        echo "<h3> Here are the Tickets You Have Submitted</h3> ";
+        echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th>";
+        while($row = mysqli_fetch_array($result)) {
+            echo "<tr>";
+            echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[1]."</td>" .
+                "<td>".$row[2]."</td><td>".$row[3]."</td>");
+
+            echo "</tr>";
+            print("\n");
+        }
+        echo "</table> </div>";
+    }
     ?><br>
 
-</div>
+</>
 
 
-<div id = "data-table" class = "invisible">
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>ID</th>
-            <th>Date of Purchase</th>
-        </tr>
-        <tr>
-            <td>app.blah.example</td>
-            <td>23987698630984</td>
-            <td>03/06/2020</td>
-        </tr>
-        <tr>
-            <td>movie.another.example</td>
-            <td>43637658996754</td>
-            <td>03/05/2020</td>
-        </tr>
-        <tr>
-            <td>tv.show.wow</td>
-            <td>56457457659769</td>
-            <td>03/04/2020</td>
-        </tr>
-        <tr>
-            <td>app.fun.app</td>
-            <td>43653476744575</td>
-            <td>03/05/2020</td>
-        </tr>
-        <tr>
-            <td>movie.harry.potter</td>
-            <td>98703495034546</td>
-            <td>03/08/2020</td>
-        </tr>
-        <tr>
-            <td>movie.another.one</td>
-            <td>49046980954567</td>
-            <td>03/07/2020</td>
-        </tr>
-    </table>
-</div>
+<!--<div id = "data-table" class = "invisible">-->
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <th>Name</th>-->
+<!--            <th>ID</th>-->
+<!--            <th>Date of Purchase</th>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>app.blah.example</td>-->
+<!--            <td>23987698630984</td>-->
+<!--            <td>03/06/2020</td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>movie.another.example</td>-->
+<!--            <td>43637658996754</td>-->
+<!--            <td>03/05/2020</td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>tv.show.wow</td>-->
+<!--            <td>56457457659769</td>-->
+<!--            <td>03/04/2020</td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>app.fun.app</td>-->
+<!--            <td>43653476744575</td>-->
+<!--            <td>03/05/2020</td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>movie.harry.potter</td>-->
+<!--            <td>98703495034546</td>-->
+<!--            <td>03/08/2020</td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>movie.another.one</td>-->
+<!--            <td>49046980954567</td>-->
+<!--            <td>03/07/2020</td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--</div>-->
 
 
 <div id = "share" class="invisible">
