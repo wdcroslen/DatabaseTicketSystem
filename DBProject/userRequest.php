@@ -26,6 +26,11 @@ session_start();
         <a href="index.php" class="logo">Ticket</a>
     </div>
 
+    <?php
+    function showTables(){
+//        data-table.class = visible
+    }
+    ?>
     <div class="button-box-left">
         <script>
             function showTickets(){
@@ -51,10 +56,14 @@ session_start();
         </script>
         <button onclick = "showTickets()"  id="ticketB" name="filter">View Tickets</button>
         <button onclick = "showPanel()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
+
     </div>
+
+
 
     <div class="button-box">
     </div>
+
 </div>
 
 <div id ="sideBar">
