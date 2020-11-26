@@ -40,18 +40,18 @@ exit(0);
 //$row = $table->select('name', 'age')->execute()->fetchAll();
 //var_dump($table);
 
-function getUsersList($conn){
-    $query = "SELECT * FROM user";
-    $result = mysqli_query($conn,$query);
-    $arr =[];
-    while($row = mysqli_fetch_array($result)) {
-        array_push($arr,$row[2]);
-        //First | Last | UtepEmail | Role
-        echo ($row[0] . " " . $row[1] . " " . $row[2] . " " . $row[3]); // Print the entire row data
-        print("\n");
-    }
-    return $arr;
-}
+//function getUsersList($conn){
+//    $query = "SELECT * FROM user";
+//    $result = mysqli_query($conn,$query);
+//    $arr =[];
+//    while($row = mysqli_fetch_array($result)) {
+//        array_push($arr,$row[2]);
+//        //First | Last | UtepEmail | Role
+//        echo ($row[0] . " " . $row[1] . " " . $row[2] . " " . $row[3]); // Print the entire row data
+//        print("\n");
+//    }
+//    return $arr;
+//}
 
 function getUserTickets($conn,$user){
     $query = "SELECT * FROM Ticket Where UtepEmail = '$user'";
