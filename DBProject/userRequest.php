@@ -47,7 +47,7 @@ session_start();
             }
             function showPanel(){
                 // var elem = document.getElementById("ticketPanelButton");
-                document.getElementById("sideBar").style.width = "250px";
+                document.getElementById("sideBar").style.width = "300px";
             }
             function hidePanel(){
                 // var elem = document.getElementById("ticketPanelButton");
@@ -55,8 +55,12 @@ session_start();
             }
         </script>
         <button onclick = "showTickets()"  id="ticketB" name="filter">View Tickets</button>
+<<<<<<< HEAD
+        <button onclick = "showPanel(), fillPlaceholder()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
+=======
         <button onclick = "showPanel()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
 
+>>>>>>> 5f96e5af134c37bc33eb23e98373982fee013c95
     </div>
 
 
@@ -67,52 +71,33 @@ session_start();
 </div>
 
 <div id ="sideBar">
-    <h3>Generate A Ticket</h3>
-    <form>
-        <p class ="closeButton" onclick = "hidePanel()"
-        >Close</p>
-        <input type="text" placeholder="fullMinerEmail">
-        <div style="padding: 10px"></div>
-        <select name="cols" id="cols" class="select">
-            <option id="select-title">Select Category</option>
-        </select>
+    <div>
+        <h3>Generate A Ticket</h3>
+        <form>
+            <p class ="closeButton" onclick = "hidePanel()"
+            >Close</p>
 
-        <div style="padding: 10px"></div>
-<!--        <input type="number" placeholder="Limit number of rows">-->
-        <div style="padding: 10px"></div>
+            <?php $session_value=(isset($_SESSION['user']))?$_SESSION['user']:''; ?>
+                <script>
+                    function fillPlaceholder(){
+                        var myvar='<?php echo $session_value;?>';
+                        document.getElementById("minerRequest").value = myvar;
+                    }
+                </script>
 
-    </form>
-
-    <div id="table-select">
-        <div id="table-box" onCLick="showCheckboxes()">
-
-        </div>
-
-        <div id="checkboxes" class="hidden">
-            <label for="col1">
-                <input type="checkbox" id="col1" />col1</label>
-            <label for="col2">
-                <input type="checkbox" id="col2" />col4</label>
-            <label for="col3">
-                <input type="checkbox" id="col3" />col5</label>
-            <label for="col4">
-                <input type="checkbox" id="col4" />col6</label>
-            <label for="col5">
-                <input type="checkbox" id="col5" />col7</label>
-            <label for="col6">
-                <input type="checkbox" id="col4" />col8</label>
-            <label for="col7">
-                <input type="checkbox" id="col5" />col9</label>
-            <label for="col8">
-                <input type="checkbox" id="col6" />col10</label>
-        </div>
+            <input name="minerRequest" id="minerRequest" type="text" placeholder="fullMinerEmail"></input>
+            <div style="padding: 10px"></div>
+            <label for="category">Choose a Category for your issue:</label>
+            <select name="category" id="category" class="select">
+                    <option value="Software">Software</option>
+                    <option value="Hardware">Hardware</option>
+            </select>
+            <div style="padding: 10px"></div>
+            <input type="submit" value="Generate Request" name="submit">
+        </form>
     </div>
 
-    <div style="padding: 10px"></div>
-
-    <button onclick="showDataTable()">Fake Submit</button>
 </div>
-
 
 <div id = "centered">
     <img src="UTEP_LOGO.png" alt="logo here">
@@ -144,60 +129,27 @@ session_start();
         }
         echo "</table> </div>";
     }
-    ?><br>
-
-</>
 
 
-<!--<div id = "data-table" class = "invisible">-->
-<!--    <table>-->
-<!--        <tr>-->
-<!--            <th>Name</th>-->
-<!--            <th>ID</th>-->
-<!--            <th>Date of Purchase</th>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td>app.blah.example</td>-->
-<!--            <td>23987698630984</td>-->
-<!--            <td>03/06/2020</td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td>movie.another.example</td>-->
-<!--            <td>43637658996754</td>-->
-<!--            <td>03/05/2020</td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td>tv.show.wow</td>-->
-<!--            <td>56457457659769</td>-->
-<!--            <td>03/04/2020</td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td>app.fun.app</td>-->
-<!--            <td>43653476744575</td>-->
-<!--            <td>03/05/2020</td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td>movie.harry.potter</td>-->
-<!--            <td>98703495034546</td>-->
-<!--            <td>03/08/2020</td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td>movie.another.one</td>-->
-<!--            <td>49046980954567</td>-->
-<!--            <td>03/07/2020</td>-->
-<!--        </tr>-->
-<!--    </table>-->
-<!--</div>-->
+    function generateTicket(){
+        global $conn;
+        $user =  $_GET['minerRequest'];
+        $category =$_GET['category'];
+        $query = "INSERT INTO Ticket (UtepEmail,Status,Category) Values('$user','Open','$category')";
+        if ($conn->query($query) === TRUE) {
+           $a = true;
+        } else {
+            echo "Error: " . $query . "<br>" . $conn->error;
+        }
+    }
 
+    if (isset($_GET['submit'])) {
+        generateTicket();
+    }
 
-<div id = "share" class="invisible">
-    <h4>Share Query</h4>
-    <input type="text" placeholder="Share with a fellow Googler.">
-    <div style="padding:10px"></div>
-    <button id="header-button" onclick="hideShare()">Share</button>
+    ?>
+
 </div>
-
-<!--<script src="script.js"></script>-->
 
 
 </body>
