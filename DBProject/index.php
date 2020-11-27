@@ -68,12 +68,26 @@ function validUser($conn){
     }
     return false;
 }
+function validAdmin($conn){
+    $userInputEmail = isset($_POST['usernameTextbox']) ? $_POST['usernameTextbox'] : " ";
+    $userInputPassword = isset($_POST['passwordTextbox']) ? $_POST['passwordTextbox'] : " ";
+    $passQuery = "Select password from techmember where username = '$userInputEmail'";
+    $adminPass = mysqli_query($conn,$passQuery);
+    $row = mysqli_fetch_array($adminPass);
+
+    if (password_verify($userInputPassword,$row[0])){
+        return true;
+    }
+    return false;
+}
 
 function display($conn){
     $_SESSION['user'] = $_POST["usernameTextbox"];
 //    if(userExists($_POST["usernameTextbox"])){
-
-    if (validUser($conn)){
+    if (validAdmin($conn)){
+        header('location:admin.php');
+    }
+    else if (validUser($conn)){
         header('location:userRequest.php');
     }
     else{

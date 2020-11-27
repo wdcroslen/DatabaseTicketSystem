@@ -109,8 +109,6 @@ $conn = new mysqli($servername, $username, $password, $database);
         $queryStudent  = "INSERT INTO User (FirstName,LastName,UTEPEmail,Role,Password)
                 VALUES ('".$sfirstName."','".$slastName."','".$sEmail."','".$role."','".$passTest."');";
 
-
-
         if ($conn->query($queryStudent) === TRUE) {
             echo "<br> New record created successfully for student ".$sEmail;
 
