@@ -55,12 +55,8 @@ session_start();
             }
         </script>
         <button onclick = "showTickets()"  id="ticketB" name="filter">View Tickets</button>
-<<<<<<< HEAD
         <button onclick = "showPanel(), fillPlaceholder()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
-=======
-        <button onclick = "showPanel()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
 
->>>>>>> 5f96e5af134c37bc33eb23e98373982fee013c95
     </div>
 
 

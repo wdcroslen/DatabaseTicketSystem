@@ -12,7 +12,10 @@ $database = "f20am_team13";
 $currentUser = "";
 
 // Create connection
+global $conn;
 $conn = new mysqli($servername, $username, $password, $database);
+
+
 //$_SESSION['conn'] = $conn;
 
 // Check connection
@@ -50,17 +53,31 @@ function getUsersList($conn){
 }
 
 if($_SERVER['REQUEST_METHOD']=='POST') {
-//    echo "YEEET";
-    display();
+    display($conn);
 }
 
-function display(){
+function validUser($conn){
+    $userInputEmail = isset($_POST['usernameTextbox']) ? $_POST['usernameTextbox'] : " ";
+    $userInputPassword = isset($_POST['passwordTextbox']) ? $_POST['passwordTextbox'] : " ";
+    $passQuery = "Select password from user where UtepEmail = '$userInputEmail'";
+    $userPass = mysqli_query($conn,$passQuery);
+    $row = mysqli_fetch_array($userPass);
+
+    if (password_verify($userInputPassword,$row[0])){
+        return true;
+    }
+    return false;
+}
+
+function display($conn){
     $_SESSION['user'] = $_POST["usernameTextbox"];
-    if(userExists($_POST["usernameTextbox"])){
+//    if(userExists($_POST["usernameTextbox"])){
+
+    if (validUser($conn)){
         header('location:userRequest.php');
     }
     else{
-        echo("<div class ='center'> Incorrect Username </div>");
+        echo("<div class ='center'> Incorrect Username/Password </div>");
     }
 }
 
@@ -84,49 +101,8 @@ function display(){
 <div class="loginTitle"></div>
 
 
-
-
-<!---------------------------------------------------------------------------------------------------------------------------->
-<!--    <h1>Create Student</h1>-->
-    <!-- styling of the form for bootstrap https://getbootstrap.com/docs/4.5/components/forms/ -->
-<!--    <form action="index.php" method="post">-->
-<!--        <div class="form-group">-->
-<!--            <label for="id">ID</label>-->
-<!--            <input class="form-control" type="text" id="id" name="id">-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="first_name">First Name</label>-->
-<!--            <input class="form-control" type="text" id="first_name" name="first_name">-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="middle_name">Middle Name</label>-->
-<!--            <input class="form-control" type="text" id="middle_name" name="middle_name">-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="last_name">Last Name</label>-->
-<!--            <input class="form-control" type="text" id="last_name" name="last_name">-->
-<!--        </div>-->
-<!---->
-<!--        <div class="form-group">-->
-<!--            <input class="btn btn-primary" name='Submit' type="submit" value="Submit">-->
-<!--        </div>-->
-<!--    </form>-->
-<!--    <div>-->
-<!--        <br>-->
-<!--        <a href="student_menu.php">Back to Student Menu</a></br>-->
-<!--    </div>-->
-
-<!---------------------------------------------------------------------------------------------------------------------------->
-
-
-
 <div id="primaryLoginFormDiv" class="center">
     <div>
-        <?php
-
-
-           ?>
-
         <script>
         function validateUser() {
             var x = document.forms["loginForm"]["usernameTextbox"].value;
@@ -141,7 +117,8 @@ function display(){
     <form id="loginForm" action="index.php" method="post" onsubmit="return validateUser()">
         <input type="text" id="usernameTextbox" name="usernameTextbox" placeholder="User Name (e.g., domain\name)" maxlength="100">
         <input type="password" id="passwordTextbox" name="passwordTextbox" placeholder="Password" maxlength="100" data-localize="Password">
-        <div class="forgotPassword"><a id="forgotPasswordAnchor" href="https://adminapps.utep.edu/ssoactions" title="Reset your password or unlock your account." data-localize="ForgotPassword">New Account/Change Password</a></div>
+        <div class="forgotPassword"><a id="forgotPasswordAnchor" href="createUser.php" title="Reset your password or unlock your account." data-localize="ForgotPassword">New Account/Change Password</a></div>
+<!--        https://adminapps.utep.edu/ssoactions-->
         <div>
             <button type="submit" class="button" id="loginSubmitButton">
                 <a href = "userRequest.php"></a>
@@ -160,11 +137,6 @@ function display(){
 <!--<footer>© 2020 Dell Inc. ALL RIGHTS RESERVED</footer>-->
 </html>
 <?php
-//    session_start();
-//    $_SESSION["username"] = "green";
-
-//$_SESSION['userName'] = 'Root';
-
 if (isset($_POST['Submit'])) {
 
     echo "YEET";
@@ -174,7 +146,6 @@ if (isset($_POST['Submit'])) {
     /*<td><a href="userRequest.php?Sid=<?php echo $row[0] ?>">Update</a></td>*/
     $sid = isset($_POST['id']) ? $_POST['id'] : " ";
 
-//    $sfirstName = isset($_POST['first_name']) ? $_POST['first_name'] : " ";
-//    $smiddleName = isset($_POST['middle_name']) ? $_POST['middle_name'] : " ";
-//    $slastName = isset($_POST['last_name']) ? $_POST['last_name'] : " ";
+
+
 }
