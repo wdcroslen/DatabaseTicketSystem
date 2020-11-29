@@ -110,7 +110,7 @@ session_start();
     <img id = "Ulogo" src="UTEP_LOGO.png" alt="logo here">
 </div>
 
-<div id = "centered-sesh">
+<div>
     Welcome To Ticket Editing <?php
     echo $_SESSION['user'];
     if(isset($_SESSION['TicketId'])) {
@@ -141,7 +141,19 @@ session_start();
         echo "</br> ";
         echo "<form method='post' action='editTicket.php' id='addNoteForm'>
                 <textarea maxlength='200' rows='4' cols='50' id='note' name='note'> Enter Note here...</textarea>
-                <input type='submit' value='Add Note' name='addNote'>
+                <br>
+                <label for='status'>Change Ticket Status</label><br>
+                
+                <select name='status' id='status' class='select'>
+                    <option value='Open'>Open</option>
+                    <option value='Hold'>Hold</option>
+                    <option value='Solved'>Solved</option>
+                </select>
+                
+                <br>
+                <br>
+                <input type='submit' value='Add Note' name='addNote' style = 'width: 80px height: 40px'>
+                
                 </form>
                 
               
@@ -155,13 +167,15 @@ session_start();
         $tid = $_SESSION['TicketId'];
         $query = "SELECT * FROM Notes Where TicketId = $tid";
         $result = mysqli_query($conn,$query);
+        $q2 = "SELECT lastChanged FROM statusChange Where TicketId = $tid";
+        $lastChanged = mysqli_fetch_array(mysqli_query($conn,$q2));
         echo '<br></br>';
         echo "<div id = 'notes-on-ticket' class = 'invisible'><table> ";
         echo "<h3> Here are the Notes on this particular ticket.</h3> ";
-        echo "<tr><th>Ticket ID</th><th>Note</th>";
+        echo "<tr><th>Ticket ID</th><th>Author</th><th>Time Added</th><th>Last Changed</th><th>Note</th>";
         while($row = mysqli_fetch_array($result)) {
             echo "<tr>";
-            echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[1]."</td>");
+            echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[2]."</td>" . " <td>".$row[3]."</td>" . " <td>".$lastChanged[0]."</td>" ." <td>".$row[1]."</td>");
 
             echo "</tr>";
             print("\n");
@@ -178,8 +192,8 @@ session_start();
         $tid = $_SESSION['TicketId'];
         $note = $_POST['note'];
         $date=date("Y-m-d H:i:s");
-        $query = "INSERT INTO Notes (TicketId,Note) Values($tid,'$note')";
-        $q2 = "INSERT INTO AddNotes (TicketId,TechMember,TimeAdded) Values($tid,'$user','$date')";
+        $query = "INSERT INTO Notes (TicketId,TechMember,Note,TimeAdded) Values($tid,'$user','$note','$date')";
+        $q2 = "INSERT INTO statusChange (TicketId,lastChanged) Values($tid,'$date')";
         if ($conn->query($query) === TRUE) {
             $b = true;
         } else {
@@ -192,14 +206,6 @@ session_start();
         }
     }
 
-//    if($_SERVER['REQUEST_METHOD']=='POST') {
-//
-//        $tID = isset($_POST['TicketId']) ? $_POST['TicketId'] : " ";
-//        $_SESSION['ID'] = $tID;
-//        if ($tID) {
-//            header('location:editTicket.php');
-//        }
-//    }
 
     ?>
 
