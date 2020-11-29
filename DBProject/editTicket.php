@@ -140,7 +140,7 @@ session_start();
         echo "</br> ";
         echo "</br> ";
         echo "<form method='post' action='editTicket.php' id='addNoteForm'>
-                <textarea maxlength='200' rows='4' cols='50' id='note' name='note'> Enter Note here...</textarea>
+                <textarea maxlength='200' rows='4' cols='50' id='note' name='note'></textarea>
                 <br>
                 <label for='status'>Change Ticket Status</label><br>
                 
@@ -191,19 +191,38 @@ session_start();
         $user = $_SESSION['user'];
         $tid = $_SESSION['TicketId'];
         $note = $_POST['note'];
+        $selectedStatus = $_POST['status'];
         $date=date("Y-m-d H:i:s");
-        $query = "INSERT INTO Notes (TicketId,TechMember,Note,TimeAdded) Values($tid,'$user','$note','$date')";
-        $q2 = "INSERT INTO statusChange (TicketId,lastChanged) Values($tid,'$date')";
-        if ($conn->query($query) === TRUE) {
-            $b = true;
-        } else {
-            echo "Error: " . $query . "<br>" . $conn->error;
+        if (!$note == ""){
+            $query = "INSERT INTO Notes (TicketId,TechMember,Note,TimeAdded) Values($tid,'$user','$note','$date')";
+            if ($conn->query($query) === TRUE) {
+                $b = true;
+            } else {
+                echo "Error: " . $query . "<br>" . $conn->error;
+            }
         }
-        if ($conn->query($q2) === TRUE) {
-            $b = true;
+
+        $currStatusQ = "Select Status from ticket where TicketId = $tid";
+        $status = mysqli_fetch_array(mysqli_query($conn,$currStatusQ));
+        if ($status[0] == $selectedStatus) {
+            echo "";
         } else {
-            echo "Error: " . $q2 . "<br>" . $conn->error;
+            $updateQuery = "UPDATE Ticket set Status = '$selectedStatus' WHERE TicketId = $tid";
+
+            $q2 = "INSERT INTO statusChange (TicketId,lastChanged) Values($tid,'$date')";
+
+            if ($conn->query($q2) === TRUE) {
+                $b = true;
+            } else {
+                echo "Error: " . $q2 . "<br>" . $conn->error;
+            }
+            if ($conn->query($updateQuery) === TRUE) {
+                $b = true;
+            } else {
+                echo "Error: " . $updateQuery . "<br>" . $conn->error;
+            }
         }
+
     }
 
 
