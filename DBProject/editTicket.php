@@ -192,6 +192,7 @@ session_start();
         $tid = $_SESSION['TicketId'];
         $note = $_POST['note'];
         $selectedStatus = $_POST['status'];
+        //TODO: if selected status == resolved update time resolved  attribute in ticket table.
         $date=date("Y-m-d H:i:s");
         if (!$note == ""){
             $query = "INSERT INTO Notes (TicketId,TechMember,Note,TimeAdded) Values($tid,'$user','$note','$date')";
@@ -201,12 +202,41 @@ session_start();
                 echo "Error: " . $query . "<br>" . $conn->error;
             }
         }
+        function format_interval(DateInterval $interval) {
+            $result = "";
+            if ($interval->y) { $result .= $interval->format("%y years "); }
+            if ($interval->m) { $result .= $interval->format("%m months "); }
+            if ($interval->d) { $result .= $interval->format("%d days "); }
+            if ($interval->h) { $result .= $interval->format("%h hours "); }
+            if ($interval->i) { $result .= $interval->format("%i minutes "); }
+            if ($interval->s) { $result .= $interval->format("%s seconds "); }
 
+            return $result;
+        }
+
+
+
+
+
+        $dateNow= new DateTime();
         $currStatusQ = "Select Status from ticket where TicketId = $tid";
         $status = mysqli_fetch_array(mysqli_query($conn,$currStatusQ));
         if ($status[0] == $selectedStatus) {
             echo "";
         } else {
+            if ($selectedStatus == "Solved"){
+                $startTimeQ = "Select RequestTime from ticket where ticketId = $tid";
+                $startTime = mysqli_fetch_array(mysqli_query($conn,$startTimeQ));
+                $diff = abs(strtotime($date) - strtotime($startTime[0]));  //What is stored in the DB
+                    /// THIS IS HOW YOU CONVERT TO HUMAN READBLE FORMAT
+//                $start_time   = date_create_from_format('Y-m-d H:i:s', $startTime[0]);
+//                $difference = $dateNow->diff($start_time);
+//                echo "Difference:" . format_interval($difference) . "<br>";
+//
+
+                $resolveQuery = "UPDATE Ticket set ResolveTime = $diff WHERE TicketID = $tid";
+                $resolved = mysqli_query($conn,$resolveQuery);
+            }
             $updateQuery = "UPDATE Ticket set Status = '$selectedStatus' WHERE TicketId = $tid";
 
             $q2 = "INSERT INTO statusChange (TicketId,lastChanged) Values($tid,'$date')";
