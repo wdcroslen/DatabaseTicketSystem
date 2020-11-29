@@ -29,7 +29,7 @@ b{
     padding: 10px;
 }
 
-#ticketB, #ticketB2, #ticketPanelButton {
+#ticketB, #ticketB2, #noteButton, #ticketPanelButton {
     border: none;
     background-color: whitesmoke;
     color: black;

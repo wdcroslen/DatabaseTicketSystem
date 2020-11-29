@@ -28,8 +28,8 @@ session_start();
     <div class="button-box-left">
         <script>
             function showTickets(){
-                document.getElementById("openTickets").classList.add("invisible");
-                document.getElementById("ticketB2").textContent = "Unresolved Tickets";
+                document.getElementById("notes-on-ticket").classList.add("invisible");
+                document.getElementById("noteButton").textContent = "Show Notes";
 
                 var elem = document.getElementById("data-table");
                 var logo =  document.getElementById("Ulogo");
@@ -43,17 +43,17 @@ session_start();
                 else {
                     elem.classList.add("invisible");
                     logo.classList.remove("invisible");
-                    butt.textContent = "View Tickets"
+                    butt.textContent = "Edit Ticket"
                 }
             }
 
-            function showOpenTickets(){
+            function showNotes(){
                 document.getElementById("data-table").classList.add("invisible");
-                document.getElementById("ticketB").textContent = "View Tickets";
+                document.getElementById("ticketB").textContent = "Edit Ticket";
 
-                var elem = document.getElementById("openTickets");
+                var elem = document.getElementById("notes-on-ticket");
                 var logo =  document.getElementById("Ulogo");
-                var butt = document.getElementById("ticketB2");
+                var butt = document.getElementById("noteButton");
 
                 if (elem.className == "invisible"){
                     elem.classList.remove("invisible");
@@ -63,7 +63,7 @@ session_start();
                 else {
                     elem.classList.add("invisible");
                     logo.classList.remove("invisible");
-                    butt.textContent = "Unresolved Tickets"
+                    butt.textContent = "Show Notes"
                 }
             }
 
@@ -76,9 +76,9 @@ session_start();
                 document.getElementById("sideBar").style.width = "0";
             }
         </script>
-        <button onclick = "showTickets()"  id="ticketB" name="filter">View Tickets</button>
-        <button onclick = "showOpenTickets()"  id="ticketB2" name="filter">Unresolved Tickets</button>
-        <button onclick = "showPanel(), fillPlaceholder()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
+        <button onclick = "showTickets()"  id="ticketB" name="filter">Edit Ticket</button>
+        <button onclick = "showNotes()"  id="noteButton" name="filter">Show Notes</button>
+        <button onclick = "showPanel()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
 
     </div>
 
@@ -116,7 +116,7 @@ session_start();
     if(isset($_SESSION['TicketId'])) {
         echo "You are viewing Ticket:" . $_SESSION['TicketId'];
         showTickets();
-        showCurrentNote();
+        viewNotes();
     }
 
     function showTickets(){
@@ -140,7 +140,7 @@ session_start();
         echo "</br> ";
         echo "</br> ";
         echo "<form method='post' action='editTicket.php' id='addNoteForm'>
-                <textarea maxlength='200' rows='4' cols='50' id = 'note' name='note' form='usrform'> Enter Note here...</textarea>
+                <textarea maxlength='200' rows='4' cols='50' id='note' name='note'> Enter Note here...</textarea>
                 <input type='submit' value='Add Note' name='addNote'>
                 </form>
                 
@@ -149,20 +149,19 @@ session_start();
 
         echo "</div>";
     }
-//      <button onclick = 'addNote()'  id='ticketPanelButton' name='filter'>Add Note</button>
 
-    function showCurrentNote(){
+    function viewNotes(){
         global $conn;
-        $query = "SELECT * FROM UnsolvedTickets";
+        $tid = $_SESSION['TicketId'];
+        $query = "SELECT * FROM Notes Where TicketId = $tid";
         $result = mysqli_query($conn,$query);
         echo '<br></br>';
-        echo "<div id = 'openTickets' class = 'invisible'><table> ";
-        echo "<h3> These are all unresolved tickets</h3> ";
-        echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th><th>Time Requested</th>";
+        echo "<div id = 'notes-on-ticket' class = 'invisible'><table> ";
+        echo "<h3> Here are the Notes on this particular ticket.</h3> ";
+        echo "<tr><th>Ticket ID</th><th>Note</th>";
         while($row = mysqli_fetch_array($result)) {
             echo "<tr>";
-            echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[1]."</td>" .
-                "<td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td>");
+            echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[1]."</td>");
 
             echo "</tr>";
             print("\n");
@@ -172,16 +171,24 @@ session_start();
         echo "</div>";
     }
 
+
     if (isset($_POST['addNote'])) {
         global $conn;
+        $user = $_SESSION['user'];
         $tid = $_SESSION['TicketId'];
         $note = $_POST['note'];
-        $a=date("Y-m-d H:i:s");
-        $query = "INSERT INTO Notes (TicketId,Note) Values($tid,$note)";
+        $date=date("Y-m-d H:i:s");
+        $query = "INSERT INTO Notes (TicketId,Note) Values($tid,'$note')";
+        $q2 = "INSERT INTO AddNotes (TicketId,TechMember,TimeAdded) Values($tid,'$user','$date')";
         if ($conn->query($query) === TRUE) {
             $b = true;
         } else {
             echo "Error: " . $query . "<br>" . $conn->error;
+        }
+        if ($conn->query($q2) === TRUE) {
+            $b = true;
+        } else {
+            echo "Error: " . $q2 . "<br>" . $conn->error;
         }
     }
 
