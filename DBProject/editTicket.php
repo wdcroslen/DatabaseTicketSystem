@@ -92,14 +92,14 @@ session_start();
 <div id ="sideBar">
     <div>
         <h3>Resolve Tickets/Add Notes</h3>
-        <form href = "editTicket.php" method="post">
+        <form>
             <p class ="closeButton" onclick = "hidePanel()"
             >Close</p>
 
-            <label for="TicketId">Choose a Specific Ticket to View</label>
-            <input type = "text" id = "TicketId" name ="TicketId" required>
+            <label for="specificTicket">Choose a Specific Ticket to View</label>
+            <input type = "text" id = "specificTicket" name ="specificTicket" >
             <div style="padding: 10px"></div>
-            <input type="submit" value="View Ticket" name="submit">
+            <input type="submit" value="Generate Request" name="submit">
 
         </form>
     </div>
@@ -111,39 +111,22 @@ session_start();
 </div>
 
 <div id = "centered-sesh">
-    Welcome ADMIN <?php
-    if(isset($_SESSION['user'])) {
-        echo "Your session is running " . $_SESSION['user'];
+    Welcome To Ticket Editing <?php
+    echo $_SESSION['user'];
+    if(isset($_SESSION['TicketId'])) {
+        echo "You are viewing Ticket:" . $_SESSION['TicketId'];
         showTickets();
-        showOpenTickets();
+        showCurrentNote();
     }
 
-//    function showTickets(){
-//        global $conn;
-//        $query = "SELECT * FROM Ticket";
-//        //TODO: let the ticket member order the tickets
-//        $result = mysqli_query($conn,$query);
-//        echo '<br></br>';
-//        echo "<div id = 'data-table' class = 'invisible'><table> ";
-//        echo "<h3> These are all the Tickets</h3> ";
-//        echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th>";
-//        while($row = mysqli_fetch_array($result)) {
-//            echo "<tr>";
-//            echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[1]."</td>" .
-//                "<td>".$row[2]."</td><td>".$row[3]."</td>");
-//
-//            echo "</tr>";
-//            print("\n");
-//        }
-//        echo "</table> </div>";
-//    }
     function showTickets(){
         global $conn;
-        $query = "SELECT * FROM Ticket";
+        $tid = $_SESSION['TicketId'];
+        $query = "SELECT * FROM Ticket where TicketId = $tid";
         $result = mysqli_query($conn,$query);
         echo '<br></br>';
         echo "<div id = 'data-table' class = 'invisible'><table> ";
-        echo "<h3>These are all the Tickets</h3> ";
+        echo "<h3>This is your selected Ticket</h3> ";
         echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th><th>Time Requested</th>";
         while($row = mysqli_fetch_array($result)) {
             echo "<tr>";
@@ -153,10 +136,22 @@ session_start();
             echo "</tr>";
             print("\n");
         }
-        echo "</table> </div>";
-    }
+        echo "</table> ";
+        echo "</br> ";
+        echo "</br> ";
+        echo "<form method='post' action='editTicket.php' id='addNoteForm'>
+                <textarea maxlength='200' rows='4' cols='50' id = 'note' name='note' form='usrform'> Enter Note here...</textarea>
+                <input type='submit' value='Add Note' name='addNote'>
+                </form>
+                
+              
+                <br>";
 
-    function showOpenTickets(){
+        echo "</div>";
+    }
+//      <button onclick = 'addNote()'  id='ticketPanelButton' name='filter'>Add Note</button>
+
+    function showCurrentNote(){
         global $conn;
         $query = "SELECT * FROM UnsolvedTickets";
         $result = mysqli_query($conn,$query);
@@ -172,30 +167,33 @@ session_start();
             echo "</tr>";
             print("\n");
         }
-        echo "</table> </div>";
+        echo "</table> ";
+
+        echo "</div>";
     }
 
-
-    function generateTicket(){
+    if (isset($_POST['addNote'])) {
         global $conn;
-        $user =  $_GET['minerRequest'];
-        $category =$_GET['category'];
-        $query = "INSERT INTO Ticket (UtepEmail,Status,Category) Values('$user','Open','$category')";
+        $tid = $_SESSION['TicketId'];
+        $note = $_POST['note'];
+        $a=date("Y-m-d H:i:s");
+        $query = "INSERT INTO Notes (TicketId,Note) Values($tid,$note)";
         if ($conn->query($query) === TRUE) {
-            $a = true;
+            $b = true;
         } else {
             echo "Error: " . $query . "<br>" . $conn->error;
         }
     }
 
-    if (isset($_POST['submit'])) {
-        $tID = isset($_POST['TicketId']) ? $_POST['TicketId'] : " ";
-        $_SESSION['TicketId'] = $tID;
-        $URL="editTicket.php";
-        echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
-        echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
-//        header('Location:editTicket.php');
-    }
+//    if($_SERVER['REQUEST_METHOD']=='POST') {
+//
+//        $tID = isset($_POST['TicketId']) ? $_POST['TicketId'] : " ";
+//        $_SESSION['ID'] = $tID;
+//        if ($tID) {
+//            header('location:editTicket.php');
+//        }
+//    }
+
     ?>
 
 </div>

@@ -114,11 +114,11 @@ session_start();
         echo '<br></br>';
         echo "<div id = 'data-table' class = 'invisible'><table> ";
         echo "<h3> Here are the Tickets You Have Submitted</h3> ";
-        echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th>";
+        echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th><th>Time Requested</th>";
         while($row = mysqli_fetch_array($result)) {
             echo "<tr>";
             echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[1]."</td>" .
-                "<td>".$row[2]."</td><td>".$row[3]."</td>");
+                "<td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td>");
 
             echo "</tr>";
             print("\n");
@@ -131,7 +131,8 @@ session_start();
         global $conn;
         $user =  $_GET['minerRequest'];
         $category =$_GET['category'];
-        $query = "INSERT INTO Ticket (UtepEmail,Status,Category) Values('$user','Open','$category')";
+        $a=date("Y-m-d H:i:s");
+        $query = "INSERT INTO Ticket (UtepEmail,Status,Category,RequestTime) Values('$user','Open','$category','$a')";
         if ($conn->query($query) === TRUE) {
            $a = true;
         } else {

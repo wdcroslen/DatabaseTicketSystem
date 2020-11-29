@@ -81,21 +81,39 @@ function validAdmin($conn){
     return false;
 }
 
+
 function display($conn){
     $_SESSION['user'] = $_POST["usernameTextbox"];
 //    if(userExists($_POST["usernameTextbox"])){
     if (validAdmin($conn)){
-        header('location:admin.php');
+        $URL="admin.php";
+        echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
+        echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
+//        header('location:admin.php');
+        exit();
     }
     else if (validUser($conn)){
-        header('location:userRequest.php');
+        $URL="userRequest.php";
+        echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
+        echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
+//        header('location:userRequest.php');
+        exit();
     }
     else{
         echo("<div class ='center'> Incorrect Username/Password </div>");
     }
 }
 
-    ?>
+if (isset($_POST['Submit'])) {
+
+    echo "YEET";
+    /**
+     * Grab information from the form submission and store values into variables.
+     */
+    /*<td><a href="userRequest.php?Sid=<?php echo $row[0] ?>">Update</a></td>*/
+    $sid = isset($_POST['id']) ? $_POST['id'] : " ";
+}
+?>
 
 <!DOCTYPE html>
 <html>
@@ -150,16 +168,3 @@ function display($conn){
 </body>
 <!--<footer>© 2020 Dell Inc. ALL RIGHTS RESERVED</footer>-->
 </html>
-<?php
-if (isset($_POST['Submit'])) {
-
-    echo "YEET";
-    /**
-     * Grab information from the form submission and store values into variables.
-     */
-    /*<td><a href="userRequest.php?Sid=<?php echo $row[0] ?>">Update</a></td>*/
-    $sid = isset($_POST['id']) ? $_POST['id'] : " ";
-
-
-
-}
