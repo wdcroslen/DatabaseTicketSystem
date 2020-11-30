@@ -29,7 +29,7 @@ b{
     padding: 10px;
 }
 
-#ticketB, #ticketB2, #noteButton, #ticketPanelButton, #ticketLeaderboardButton {
+#ticketB, #ticketB2, #noteButton, #ticketPanelButton, #ticketLeaderboardButton, #generateButton {
     border: none;
     background-color: whitesmoke;
     color: black;
@@ -37,6 +37,8 @@ b{
     border-radius: 8px;
     font-size: 13px;
 }
+
+
 
 #hidden{
     margin-top: 80px;
@@ -69,9 +71,31 @@ b{
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 5px;
+    color: black
+}
+
+#sideBar2 {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    /* top: 100; */
+    margin-top: 55px;
+    left: 0;
+    background-color: #041E42;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 5px;
     color: white;
 }
 
+.butt{
+    border: none;
+    background-color: whitesmoke;
+    color: black;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+}
 .closeButton{
     position: absolute;
     top: 0;
@@ -79,6 +103,14 @@ b{
     margin-left: 50px;
     margin-top: 20px;
     color: black;
+}
+.closeButton2{
+    position: absolute;
+    top: 0;
+    right: 25px;
+    margin-left: 50px;
+    margin-top: 20px;
+    color: #FF8200;
 }
 
 .logo {

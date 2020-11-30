@@ -143,8 +143,9 @@ session_start();
         echo "</br> ";
         echo "</br> ";
         echo "<form method='post' action='editTicket.php' id='addNoteForm'>
+                <label for='note'>Enter a note for this ticket:</label><br>
                 <textarea maxlength='200' rows='4' cols='50' id='note' name='note'></textarea>
-                <br>
+                <div style='padding:10px'></div>
                 <label for='status'>Change Ticket Status</label><br>
                 
                 <select name='status' id='status' class='select'>
@@ -205,6 +206,8 @@ session_start();
                 echo "Error: " . $query . "<br>" . $conn->error;
             }
         }
+
+
         function format_interval(DateInterval $interval) {
             $result = "";
             if ($interval->y) { $result .= $interval->format("%y years "); }
@@ -255,6 +258,9 @@ session_start();
                 echo "Error: " . $updateQuery . "<br>" . $conn->error;
             }
         }
+        $URL = "editTicket.php";
+        echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
+        echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
 
     }
 

@@ -96,14 +96,26 @@ session_start();
                 function showPanel() {
                     // var elem = document.getElementById("ticketPanelButton");
                     document.getElementById("sideBar").style.width = "310px";
+                    hidePanel2();
+                }
+                function showPanel2() {
+                    // var elem = document.getElementById("ticketPanelButton");
+                    document.getElementById("sideBar2").style.width = "310px";
+                    hidePanel();
+
                 }
 
                 function hidePanel() {
                     // var elem = document.getElementById("ticketPanelButton");
                     document.getElementById("sideBar").style.width = "0";
                 }
+                function hidePanel2() {
+                    // var elem = document.getElementById("ticketPanelButton");
+                    document.getElementById("sideBar2").style.width = "0";
+                }
             </script>
             <button onclick="showPanel(), fillPlaceholder()" id="ticketPanelButton" name="filter">Ticket Panel</button>
+            <button onclick="showPanel2()" id="ticketPanelButton" name="filter">Delete Panel</button>
             <button onclick="showTickets()" id="ticketB" name="filter">View Tickets</button>
             <button onclick="showOpenTickets()" id="ticketB2" name="filter">Unresolved Tickets</button>
             <button onclick="showTicketLeaderboard()" id="ticketLeaderboardButton" name="filter">Ticket Leaderboard</button>
@@ -126,11 +138,28 @@ session_start();
                 <label for="TicketId">Choose a Specific Ticket to View</label>
                 <input type="text" id="TicketId" name="TicketId" required>
                 <div style="padding: 10px"></div>
-                <input type="submit" value="View Ticket" name="submit">
+                <input type="submit" class= "butt" value="View Ticket" name="submit">
 
             </form>
         </div>
 
+    </div>
+    <div id="sideBar2">
+        <div>
+            <h3>Remove A Ticket</h3>
+            <form href="editTicket.php" method="post">
+                <p class="closeButton2" onclick="hidePanel2()">Close</p>
+
+                <label for="TicketId">Choose a Specific Ticket To Delete</label>
+                <input type="text" id="DeleteId" name="DeleteId" required>
+                <div style="padding: 10px"></div>
+                <input type="submit" class= "butt" value="Delete Ticket" name="delete">
+                <div style="padding: 10px"></div>
+                <div style="padding: 10px"></div>
+                <img id="ticketL" src="Ticket.png" alt="logo here">
+
+            </form>
+        </div>
     </div>
 
     <div id="centered">
@@ -255,7 +284,15 @@ session_start();
                             $URL = "editTicket.php";
                             echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
                             echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
-                            //        header('Location:editTicket.php');
+                        }
+                        if (isset($_POST['delete'])) {
+                            $tID = isset($_POST['DeleteId']) ? $_POST['DeleteId'] : " ";
+                            $_SESSION['DeleteId'] = $tID;
+                            $query = "DELETE FROM TICKET WHERE TicketId = $tID";
+                            mysqli_query($conn,$query);
+                            $URL = "admin.php";
+                            echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
+                            echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
                         }
 
                         function format_interval(DateInterval $interval)

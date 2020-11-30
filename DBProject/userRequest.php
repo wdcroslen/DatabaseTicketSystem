@@ -25,12 +25,6 @@ session_start();
     <div class="button-box-left">
         <a href="index.php" class="logo">Ticket</a>
     </div>
-
-    <?php
-    function showTables(){
-//        data-table.class = visible
-    }
-    ?>
     <div class="button-box-left">
         <script>
             function showTickets(){
@@ -45,17 +39,31 @@ session_start();
                     butt.textContent = "View Tickets"
                 }
             }
-            function showPanel(){
+            function showPanel() {
                 // var elem = document.getElementById("ticketPanelButton");
-                document.getElementById("sideBar").style.width = "300px";
+                document.getElementById("sideBar").style.width = "310px";
+                hidePanel2();
             }
-            function hidePanel(){
+            function showPanel2() {
+                // var elem = document.getElementById("ticketPanelButton");
+                document.getElementById("sideBar2").style.width = "310px";
+                hidePanel();
+
+            }
+
+            function hidePanel() {
                 // var elem = document.getElementById("ticketPanelButton");
                 document.getElementById("sideBar").style.width = "0";
             }
+            function hidePanel2() {
+                // var elem = document.getElementById("ticketPanelButton");
+                document.getElementById("sideBar2").style.width = "0";
+            }
         </script>
-        <button onclick = "showTickets()"  id="ticketB" name="filter">View Tickets</button>
         <button onclick = "showPanel(), fillPlaceholder()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
+        <button onclick="showPanel2()" id="ticketPanelButton" name="filter">Delete Panel</button>
+        <button onclick = "showTickets()"  id="ticketB" name="filter">View Tickets</button>
+
 
     </div>
 
@@ -89,7 +97,8 @@ session_start();
                     <option value="Hardware">Hardware</option>
             </select>
             <div style="padding: 10px"></div>
-            <input type="submit" value="Generate Request" name="submit">
+            <div style="padding: 10px"></div>
+            <input type="submit" id ="generateButton" value="Generate Request" name="submit">
             <div style="padding: 10px"></div>
             <br>
             <img src="generate_ticket.png" alt="logo here">
@@ -97,17 +106,48 @@ session_start();
     </div>
 
 </div>
+<div id="sideBar2">
+    <div>
+        <h3>Remove A Ticket</h3>
+        <form href="editTicket.php" method="post">
+            <p class="closeButton2" onclick="hidePanel2()">Close</p>
 
-<!--<div id = "centered">-->
-<!--    <img src="generate_ticket.png" alt="logo here">-->
-<!--</div>-->
+            <label for="TicketId">Choose a Specific Ticket To Delete</label>
+            <input type="text" id="DeleteId" name="DeleteId" required>
+            <div style="padding: 10px"></div>
+            <input type="submit" class= "butt" value="Delete Ticket" name="delete">
+            <div style="padding: 10px"></div>
+            <div style="padding: 10px"></div>
+            <img id="ticketL" src="Ticket.png" alt="logo here">
+
+        </form>
+    </div>
+</div>
+
+<div id = "centered">
+    <img src="UTEP_LOGO.png" alt="logo here">
+</div>
 
 <div id = "centered-sesh">
     Welcome <?php
-
+    $userIDs = [];
     if(isset($_SESSION['user'])) {
         echo "Your session is running " . $_SESSION['user'];
         showTickets();
+    }
+    if (isset($_POST['delete'])) {
+        $tID = isset($_POST['DeleteId']) ? $_POST['DeleteId'] : " ";
+        $_SESSION['DeleteId'] = $tID;
+        if (in_array($tID, $userIDs)) {
+            $query = "DELETE FROM TICKET WHERE TicketId = $tID";
+            mysqli_query($conn,$query);
+            $URL = "userRequest.php";
+            echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
+            echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
+        } else {
+            echo "You do not have permission to delete that ID.";
+        }
+
     }
 
     function showTickets(){
@@ -119,6 +159,8 @@ session_start();
         echo "<h3> Here are the Tickets You Have Submitted</h3> ";
         echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th><th>Time Requested</th>";
         while($row = mysqli_fetch_array($result)) {
+            global $userIDs;
+            array_push($userIDs,$row[0]);
             echo "<tr>";
             echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[1]."</td>" .
                 "<td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td>");
