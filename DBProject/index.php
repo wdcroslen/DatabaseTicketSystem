@@ -15,22 +15,12 @@ $currentUser = "";
 global $conn;
 $conn = new mysqli($servername, $username, $password, $database);
 
-
-//$_SESSION['conn'] = $conn;
-
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-echo "Connected successfully\n";
 
 $userEmails = getUsersList($conn);
-//print("\n");
-//getUserTickets($conn, $userEmails[0]);
-
-//if (in_array("jdoe25@miners.utep.edu", $userEmails)) {
-//    print("\nSKRIYAKI TERRIYAKI");
-//}
 
 
 function userExists($user){

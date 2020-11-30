@@ -103,9 +103,9 @@ session_start();
                     document.getElementById("sideBar").style.width = "0";
                 }
             </script>
+            <button onclick="showPanel(), fillPlaceholder()" id="ticketPanelButton" name="filter">Ticket Panel</button>
             <button onclick="showTickets()" id="ticketB" name="filter">View Tickets</button>
             <button onclick="showOpenTickets()" id="ticketB2" name="filter">Unresolved Tickets</button>
-            <button onclick="showPanel(), fillPlaceholder()" id="ticketPanelButton" name="filter">Ticket Panel</button>
             <button onclick="showTicketLeaderboard()" id="ticketLeaderboardButton" name="filter">Ticket Leaderboard</button>
 
         </div>

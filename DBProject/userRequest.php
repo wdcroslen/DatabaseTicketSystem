@@ -90,14 +90,17 @@ session_start();
             </select>
             <div style="padding: 10px"></div>
             <input type="submit" value="Generate Request" name="submit">
+            <div style="padding: 10px"></div>
+            <br>
+            <img src="generate_ticket.png" alt="logo here">
         </form>
     </div>
 
 </div>
 
-<div id = "centered">
-    <img src="UTEP_LOGO.png" alt="logo here">
-</div>
+<!--<div id = "centered">-->
+<!--    <img src="generate_ticket.png" alt="logo here">-->
+<!--</div>-->
 
 <div id = "centered-sesh">
     Welcome <?php

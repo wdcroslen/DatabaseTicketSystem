@@ -75,10 +75,13 @@ session_start();
                 // var elem = document.getElementById("ticketPanelButton");
                 document.getElementById("sideBar").style.width = "0";
             }
+            function goBack() {
+                window.location.href = "admin.php";
+            }
         </script>
         <button onclick = "showTickets()"  id="ticketB" name="filter">Edit Ticket</button>
         <button onclick = "showNotes()"  id="noteButton" name="filter">Show Notes</button>
-        <button onclick = "showPanel()"  id="ticketPanelButton" name="filter">Ticket Panel</button>
+        <button onclick = "goBack()" href="admin.php" id ="ticketB">Go Back</button>
 
     </div>
 
