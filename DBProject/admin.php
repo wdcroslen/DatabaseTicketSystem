@@ -146,25 +146,6 @@ session_start();
                             showTicketLeaderboard();
                         }
 
-                        //    function showTickets(){
-                        //        global $conn;
-                        //        $query = "SELECT * FROM Ticket";
-                        //        //TODO: let the ticket member order the tickets
-                        //        $result = mysqli_query($conn,$query);
-                        //        echo '<br></br>';
-                        //        echo "<div id = 'data-table' class = 'invisible'><table> ";
-                        //        echo "<h3> These are all the Tickets</h3> ";
-                        //        echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th>";
-                        //        while($row = mysqli_fetch_array($result)) {
-                        //            echo "<tr>";
-                        //            echo ("<td>".$row[0]."</td>" . " " . " <td>".$row[1]."</td>" .
-                        //                "<td>".$row[2]."</td><td>".$row[3]."</td>");
-                        //
-                        //            echo "</tr>";
-                        //            print("\n");
-                        //        }
-                        //        echo "</table> </div>";
-                        //    }
                         function showTickets()
                         {
                             global $conn;
@@ -211,10 +192,10 @@ session_start();
                             $result = mysqli_query($conn, $query);
                             echo '<br></br>';
                             echo "<div id = 'ticketLeaderboard' class = 'invisible'><table> ";
-                            echo "<h3>These are all the Tickets</h3> ";
+                            echo "<h3>Leaderboard By Fastest Resolved</h3> ";
                             echo "<tr><th>Ticket ID</th><th>User</th><th>Status</th><th>Category</th><th>Time Resolved</th>";
+
                             while ($row = mysqli_fetch_array($result)) {
-                                // echo formatSeconds($row[5]);
                                 echo "<tr>";
                                 echo ("<td>" . $row[0] . "</td>" . " " . " <td>" . $row[1] . "</td>" .
                                     "<td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . formatSeconds($row[5]) . "</td>");
@@ -222,7 +203,21 @@ session_start();
                                 echo "</tr>";
                                 print("\n");
                             }
-                            echo "</table> </div>";
+                            echo "</table>";
+                            echo "<br>";
+
+
+                            echo "<div> <h3>Most Popular Category</h3> </div>";
+                            $query = "SELECT category FROM Ticket GROUP BY Category ORDER BY COUNT(*) DESC limit 1";
+                            $result = mysqli_fetch_array(mysqli_query($conn, $query));
+                            echo "<p>$result[0]</p>";
+
+                            echo "<br>";
+                            echo "<div> <h3>Average Resolve Time</h3> </div>";
+                            $query = "select avg(ResolveTime) from ticket";
+                            $result = mysqli_fetch_array(mysqli_query($conn, $query));
+                            $a = formatSeconds($result[0]);
+                            echo "<p>$a</p> <p>Hours:Minutes:Seconds</p></div>";
                         }
 
                         function formatSeconds($seconds)
