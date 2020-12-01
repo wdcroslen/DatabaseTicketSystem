@@ -139,7 +139,9 @@ session_start();
                 <input type="text" id="TicketId" name="TicketId" required>
                 <div style="padding: 10px"></div>
                 <input type="submit" class= "butt" value="View Ticket" name="submit">
-
+                <div style="padding: 10px"></div>
+                <div style="padding: 10px"></div>
+                <img id="ticketL" src="Ticket.png" alt="logo here">
             </form>
         </div>
 
@@ -246,7 +248,20 @@ session_start();
                             $query = "select avg(ResolveTime) from ticket";
                             $result = mysqli_fetch_array(mysqli_query($conn, $query));
                             $a = formatSeconds($result[0]);
-                            echo "<p>$a</p> <p>Hours:Minutes:Seconds</p></div>";
+                            echo "<p>$a</p> <p>Hours:Minutes:Seconds</p>";
+
+                            $query = "select count(*) from ticket where status = 'Solved'";
+                            $solvedCount = mysqli_fetch_array(mysqli_query($conn, $query));
+                            $query = "select count(*) from ticket where status = 'Hold'";
+                            $holdCount = mysqli_fetch_array(mysqli_query($conn, $query));
+                            $query = "select count(*) from ticket where status = 'Open'";
+                            $openCount = mysqli_fetch_array(mysqli_query($conn, $query));
+                            $total = $openCount[0]+$holdCount[0]+$solvedCount[0];
+
+                            echo "<h3>Tickets Open:</h3> <p>$openCount[0]</p>  
+                                  <h3>Tickets on Hold:</h3> <p>$holdCount[0]</p>
+                                  <h3>Tickets Solved:</h3> <p>$solvedCount[0]</p>
+                                  <h3>Total Tickets:</h3> <p>$total</p></div>";
                         }
 
                         function formatSeconds($seconds)
