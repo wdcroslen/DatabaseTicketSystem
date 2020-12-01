@@ -106,6 +106,7 @@ session_start();
     </div>
 
 </div>
+
 <div id="sideBar2">
     <div>
         <h3>Remove A Ticket</h3>
@@ -139,7 +140,12 @@ session_start();
         $tID = isset($_POST['DeleteId']) ? $_POST['DeleteId'] : " ";
         $_SESSION['DeleteId'] = $tID;
         if (in_array($tID, $userIDs)) {
+            $q1 = "DELETE FROM notes WHERE TicketId = $tID";
+            $q2 = "DELETE FROM statuschange WHERE TicketId = $tID";
             $query = "DELETE FROM TICKET WHERE TicketId = $tID";
+            echo $tID;
+            mysqli_query($conn,$q1);
+            mysqli_query($conn,$q2);
             mysqli_query($conn,$query);
             $URL = "userRequest.php";
             echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";

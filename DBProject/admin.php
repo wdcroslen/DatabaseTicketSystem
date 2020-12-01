@@ -114,7 +114,7 @@ session_start();
                     document.getElementById("sideBar2").style.width = "0";
                 }
             </script>
-            <button onclick="showPanel(), fillPlaceholder()" id="ticketPanelButton" name="filter">Ticket Panel</button>
+            <button onclick="showPanel()" id="ticketPanelButton" name="filter">Ticket Panel</button>
             <button onclick="showPanel2()" id="ticketPanelButton" name="filter">Delete Panel</button>
             <button onclick="showTickets()" id="ticketB" name="filter">View Tickets</button>
             <button onclick="showOpenTickets()" id="ticketB2" name="filter">Unresolved Tickets</button>
@@ -288,7 +288,12 @@ session_start();
                         if (isset($_POST['delete'])) {
                             $tID = isset($_POST['DeleteId']) ? $_POST['DeleteId'] : " ";
                             $_SESSION['DeleteId'] = $tID;
+                            $q1 = "DELETE FROM notes WHERE TicketId = $tID";
+                            $q2 = "DELETE FROM statuschange WHERE TicketId = $tID";
                             $query = "DELETE FROM TICKET WHERE TicketId = $tID";
+                            echo $tID;
+                            mysqli_query($conn,$q1);
+                            mysqli_query($conn,$q2);
                             mysqli_query($conn,$query);
                             $URL = "admin.php";
                             echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
